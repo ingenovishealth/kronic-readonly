@@ -97,6 +97,14 @@ kubectl -n kronic port-forward deployment/kronic 8000:8000
 
 ## Running Locally
 
+Use docker compose, kubeconfig and aws config are mounted as volumes:
+
+```
+docker compose build
+docker compose up
+```
+
+
 Kronic can use a `KUBECONFIG` file to run locally against a cluster. To do so:
 
 ```
