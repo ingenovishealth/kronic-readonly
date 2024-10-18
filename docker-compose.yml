@@ -7,11 +7,12 @@ services:
       context: .
       target: dev
     environment:
-      KRONIC_ALLOW_NAMESPACES: "test"
+      #KRONIC_ALLOW_NAMESPACES: "test"
       KRONIC_ADMIN_PASSWORD: "test2"
     volumes:
       - .:/app
-      - $HOME/.kube/kronic.yaml:/root/.kube/config
+      - $HOME/.kube/config:/root/.kube/config
+      - $HOME/.aws:/root/.aws
     ports:
       - 5000:5000
     networks:
@@ -19,4 +20,4 @@ services:
 
 networks:
   k3d-kronic:
-    external: true
+    external: false
