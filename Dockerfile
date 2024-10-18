@@ -12,7 +12,7 @@ RUN pip install -r requirements.txt
 FROM deps as dev
 COPY requirements-dev.txt /app/
 RUN pip install -r requirements-dev.txt
-RUN apk add --no-cache git openssh-client-default curl
+RUN apk add --no-cache git openssh-client-default curl aws-cli
 CMD flask run --debug -h 0.0.0.0
 
 # Release image without dev deps
