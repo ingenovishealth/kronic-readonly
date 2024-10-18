@@ -4,10 +4,10 @@
 <a href="/">«back</a>
 <div class="grid" x-data="{ newCronJobName: null }">
   <div><h1>{% block title %}CronJobs in {{ namespace }} {% endblock %}</h1></div>
-  <div style="text-align: right;"><div role="button"
+  <!--<div style="text-align: right;"><div role="button"
     @click="newCronJobName = prompt('New CronJob Name:', 'example-cronjob');
       window.location.href = `/namespaces/{{namespace}}/cronjobs/${newCronJobName}`;"
-    >Create CronJob</div></div>
+    >Create CronJob</div></div>-->
 </div>
 {% for cronjob in cronjobs %}
 <div x-cloak x-data="{jobs: [], isLoading: true, failing: false, cloneJobName: null, wrapLogs: false}" x-init="async () => {
@@ -31,10 +31,10 @@
         <th>
           <div x-data="{ suspended: {{cronjob.spec.suspend | lower }} }">
             <label>
-              Suspend
-              <input type="checkbox" role="switch"
+              Suspended: <code>{{ cronjob.spec.suspend }}</code>
+              <!--<input type="checkbox" role="switch"
                 @click="apiClient('{{namespace}}', 'cronjobs', '{{cronjob.metadata.name}}', 'suspend', 'POST', '')"
-                x-model="suspended" />
+                x-model="suspended" />-->
             </label>
           </div>
         </th>
@@ -45,9 +45,9 @@
           </div>
         </th>
         <th>
-          <a role="button" href="/namespaces/{{namespace}}/cronjobs/{{cronjob.metadata.name}}">Edit</a>
+          <a role="button" href="/namespaces/{{namespace}}/cronjobs/{{cronjob.metadata.name}}">View</a>
         </th>
-        <th>
+        <!--<th>
           <div role="button"
             @click="cloneJobName = prompt('New CronJob Name:', '{{cronjob.metadata.name}}');
               let data = JSON.stringify({name: cloneJobName});
@@ -58,13 +58,13 @@
               });">
             Clone
           </div>
-        </th>
-        <th>
+        </th>-->
+        <!--<th>
           <div role="button"
             @click="confirm('Are you sure?') ? apiClient('{{namespace}}', 'cronjobs', '{{cronjob.metadata.name}}', 'delete', 'POST', '', true) : false;">
             Delete
           </div>
-        </th>
+        </th>-->
       </tr>
     </table>
     <p>
