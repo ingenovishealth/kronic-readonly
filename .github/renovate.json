@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":separateMultipleMajorReleases",
+    ":ignoreUnstable",
+    "customManagers:githubActionsVersions",
+    ":dependencyDashboardApproval"
+  ],
+  "minimumReleaseAge": "3 days",
+  "rollbackPrs": true,
+  "configMigration": true,
+  "prHourlyLimit": 0,
+  "timezone": "America/New_York",
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "enabled": false
+    }
+  ]
+}
