@@ -5,7 +5,7 @@ name: KRONIC
     branches:
     - develop
     - main
-  
+
 jobs:
   docker_python_apps_kronic:
     name: KRONIC Docker build + upload
@@ -16,7 +16,7 @@ jobs:
       work_dir: .
       docker_context_path: .
       dockerfile_path: ./Dockerfile
-      runner: buildjet-2vcpu-ubuntu-2204
+      runner: ubuntu-22.04
     secrets:
       aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ECR }}
       aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ECR }}
