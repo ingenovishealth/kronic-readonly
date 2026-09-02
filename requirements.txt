@@ -24,7 +24,6 @@ requests==2.32.3
 requests-oauthlib==2.0.0
 rsa==4.9
 six==1.16.0
-urllib3==1.26.19
+urllib3==2.7.0
 websocket-client==1.8.0
 Werkzeug==3.0.6
-Flask-Caching==2.3.0
