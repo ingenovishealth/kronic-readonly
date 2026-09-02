@@ -67,7 +67,7 @@ jobs:
 #        with:
 #          username: ${{ secrets.dockerhub_username }}
 #          password: ${{ secrets.dockerhub_password }}
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         name: Configure AWS Credentials
         with:
           aws-access-key-id: ${{ secrets.aws_access_key }}
