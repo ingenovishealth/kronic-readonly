@@ -17,24 +17,24 @@ docker compose build
 docker compose up               # serves on http://localhost:5000 (flask --debug)
 ```
 
-Direct Python (no Docker) — expects a working kubeconfig on the host:
+Direct Python (no Docker) — expects a working kubeconfig on the host. Dependencies are managed with Poetry (`pyproject.toml` + `poetry.lock`):
 
 ```bash
-pip install -r requirements.txt -r requirements-dev.txt
-flask --app app run --debug     # or: gunicorn -w 4 -b 0.0.0.0 app:app
+poetry install --with dev
+poetry run flask --app app run --debug     # or: poetry run gunicorn -w 4 -b 0.0.0.0 app:app
 ```
 
 Tests use pytest. The suite sets `config.TEST = True` before importing `kron`, which skips kubeconfig loading, so no cluster is required:
 
 ```bash
-pytest                          # all tests
-pytest tests/test_kron.py::test_namespace_filter_allows_access   # single test
+poetry run pytest                          # all tests
+poetry run pytest tests/test_kron.py::test_namespace_filter_allows_access   # single test
 ```
 
 Format with `black` (only dev dep besides pytest):
 
 ```bash
-black .
+poetry run black .
 ```
 
 Helm chart lives at `chart/kronic/`. `chart/kronic/ci/` contains chart-test values consumed by the (currently disabled) `chart-testing` workflow.
