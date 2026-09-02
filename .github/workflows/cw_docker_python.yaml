@@ -79,7 +79,7 @@ jobs:
           registry: ${{ inputs.docker_repo }}
 
       - name: Build docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ${{ inputs.work_dir }}/${{ inputs.docker_context_path }}
           file: ${{ inputs.work_dir }}/${{ inputs.dockerfile_path }}
