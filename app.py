@@ -77,6 +77,20 @@ def _strip_immutable_fields(spec):
     return spec
 
 
+READ_ONLY_METHODS = {"GET", "HEAD", "OPTIONS"}
+
+
+@app.before_request
+def enforce_read_only():
+    if request.method in READ_ONLY_METHODS:
+        return None
+    message = f"Kronic is read-only; {request.method} is not permitted"
+    headers = {"Allow": "GET, HEAD, OPTIONS"}
+    if request.path.startswith("/api/"):
+        return {"error": message}, 405, headers
+    return message, 405, headers
+
+
 @app.route("/healthz")
 def healthz():
     return {"status": "ok"}
