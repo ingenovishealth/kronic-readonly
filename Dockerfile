@@ -1,17 +1,19 @@
 FROM python:3.12-alpine AS deps
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1 \
+    POETRY_VERSION=2.1.3 \
+    POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_NO_INTERACTION=1
 
 RUN apk --no-cache upgrade
-
-COPY requirements.txt /app/
+RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}"
 
 WORKDIR /app
-RUN pip install -r requirements.txt
+COPY pyproject.toml poetry.lock /app/
+RUN poetry install --only main
 
 
 FROM deps AS dev
-COPY requirements-dev.txt /app/
-RUN pip install -r requirements-dev.txt
+RUN poetry install --with dev
 RUN apk add --no-cache git openssh-client-default curl aws-cli
 CMD flask run --debug -h 0.0.0.0
 
