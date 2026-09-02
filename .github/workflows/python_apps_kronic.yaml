@@ -1,10 +1,10 @@
 name: KRONIC
-'on':
+"on":
   workflow_dispatch: {}
   push:
     branches:
-    - develop
-    - main
+      - develop
+      - main
 
 jobs:
   docker_python_apps_kronic:
@@ -16,7 +16,7 @@ jobs:
       work_dir: .
       docker_context_path: .
       dockerfile_path: ./Dockerfile
-      runner: ubuntu-22.04
+      runner: blacksmith-2vcpu-ubuntu-2404
     secrets:
       aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ECR }}
       aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ECR }}
