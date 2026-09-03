@@ -190,17 +190,16 @@ def get_cronjobs(namespace: str = None) -> List[dict]:
         }
         return response
 
+
 def get_cronjobs_detailed(namespace: str) -> List[dict]:
     try:
         cronjobs = [
             _clean_api_object(item)
             for item in batch.list_namespaced_cron_job(namespace=namespace).items
         ]
-    
+
         fields = ["name", "namespace"]
-        sorted_cronjobs = sorted(
-            cronjobs, key=lambda x: x["metadata"]["name"]
-        )
+        sorted_cronjobs = sorted(cronjobs, key=lambda x: x["metadata"]["name"])
         return sorted_cronjobs
 
     except ApiException as e:
@@ -290,11 +289,13 @@ def get_pods(namespace: str, job_name: str = None) -> List[dict]:
         all_pods = v1.list_namespaced_pod(namespace=namespace)
         cleaned_pods = [_clean_api_object(pod) for pod in all_pods.items]
         filtered_pods = [
-            pod for pod in cleaned_pods if pod_is_owned_by(pod, job_name) or (not job_name)
+            pod
+            for pod in cleaned_pods
+            if pod_is_owned_by(pod, job_name) or (not job_name)
         ]
 
         for pod in filtered_pods:
-            if 'startTime' in pod["status"]:
+            if "startTime" in pod["status"]:
                 pod["status"]["age"] = _get_time_since(pod["status"]["startTime"])
 
         return filtered_pods
@@ -326,7 +327,9 @@ def get_jobs_and_pods(namespace: str, cronjob_name: str) -> List[dict]:
     jobs = get_jobs(namespace, cronjob_name)
     all_pods = get_pods(namespace)
     for job in jobs:
-        job["pods"] = [pod for pod in all_pods if pod_is_owned_by(pod, job["metadata"]["name"])]
+        job["pods"] = [
+            pod for pod in all_pods if pod_is_owned_by(pod, job["metadata"]["name"])
+        ]
 
     return jobs
 
@@ -503,18 +506,26 @@ def delete_job(namespace: str, job_name: str) -> dict:
         }
         return response
 
+
 def get_datadog_link(namespace: str, cronjob_name: str, job: dict) -> dict:
     url = f"https://app.datadoghq.com/logs?"
     params = {}
-    params['query'] =f"env:{config.ENVIRONMENT_NAME} service:{cronjob_name}"
-    params['live']='false'
+    params["query"] = f"env:{config.ENVIRONMENT_NAME} service:{cronjob_name}"
+    params["live"] = "false"
 
     job_name = job["metadata"]["name"]
-    params['query'] =f"env:{config.ENVIRONMENT_NAME} service:{cronjob_name} kube_job:{job_name}"
-    padding = 2*60*1000
-    if 'startTime' in job['status']:
-        params['from_ts'] =int(parser.parse(job['status']['startTime']).timestamp()*1000)-padding
-    if 'completionTime' in job['status']:
-        params['to_ts'] = int(parser.parse(job['status']['completionTime']).timestamp()*1000)+padding
+    params["query"] = (
+        f"env:{config.ENVIRONMENT_NAME} service:{cronjob_name} kube_job:{job_name}"
+    )
+    padding = 2 * 60 * 1000
+    if "startTime" in job["status"]:
+        params["from_ts"] = (
+            int(parser.parse(job["status"]["startTime"]).timestamp() * 1000) - padding
+        )
+    if "completionTime" in job["status"]:
+        params["to_ts"] = (
+            int(parser.parse(job["status"]["completionTime"]).timestamp() * 1000)
+            + padding
+        )
     query_string = urlencode(params)
     return url + query_string

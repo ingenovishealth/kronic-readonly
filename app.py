@@ -8,7 +8,6 @@ from functools import wraps
 import yaml
 
 
-
 import config
 from kron import (
     get_cronjobs,
@@ -29,7 +28,7 @@ from kron import (
 app = Flask(__name__, static_url_path="", static_folder="static")
 auth = HTTPBasicAuth()
 
-cache = Cache(config={'CACHE_TYPE': 'SimpleCache', "CACHE_DEFAULT_TIMEOUT": 300})
+cache = Cache(config={"CACHE_TYPE": "SimpleCache", "CACHE_DEFAULT_TIMEOUT": 300})
 cache.init_app(app)
 
 
@@ -122,9 +121,9 @@ def index():
 @auth.login_required
 def view_namespace(namespace):
     cronjobs = get_cronjobs_detailed(namespace)
-    #cronjobs_with_details = []
-    #all_pods = get_pods(namespace=namespace)
-    #for cronjob in cronjobs:
+    # cronjobs_with_details = []
+    # all_pods = get_pods(namespace=namespace)
+    # for cronjob in cronjobs:
     #    cronjob_detail = get_cronjob(namespace, cronjob["name"])
     #    jobs = get_jobs(namespace=namespace, cronjob_name=cronjob["name"])
     #    for job in jobs:
@@ -132,9 +131,7 @@ def view_namespace(namespace):
     #    cronjob_detail["jobs"] = jobs
     #    cronjobs_with_details.append(cronjob_detail)
 
-    return render_template(
-        "namespace.html", cronjobs=cronjobs, namespace=namespace
-    )
+    return render_template("namespace.html", cronjobs=cronjobs, namespace=namespace)
 
 
 @app.route("/namespaces/<namespace>/cronjobs/<cronjob_name>", methods=["GET", "POST"])
