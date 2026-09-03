@@ -10,7 +10,6 @@ config.TEST = True
 
 import app as app_module
 
-
 WRITE_ROUTES = [
     ("POST", "/namespaces/test/cronjobs/some-cron"),
     ("POST", "/api/namespaces/test/cronjobs/some-cron/clone"),
