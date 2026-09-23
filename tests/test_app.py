@@ -16,7 +16,6 @@ WRITE_ROUTES = [
     ("POST", "/api/namespaces/test/cronjobs/create"),
     ("POST", "/api/namespaces/test/cronjobs/some-cron/delete"),
     ("POST", "/api/namespaces/test/cronjobs/some-cron/suspend"),
-    ("POST", "/api/namespaces/test/cronjobs/some-cron/trigger"),
     ("POST", "/api/namespaces/test/jobs/some-job/delete"),
 ]
 
@@ -36,10 +35,24 @@ def test_write_routes_return_405(client, method, path):
 
 
 def test_api_write_returns_json_405(client):
-    resp = client.post("/api/namespaces/test/cronjobs/some-cron/trigger")
+    resp = client.post("/api/namespaces/test/cronjobs/some-cron/delete")
     assert resp.status_code == 405
     assert resp.is_json
     assert "error" in resp.get_json()
+
+
+def test_trigger_is_allowed_through_read_only_guard(client, monkeypatch):
+    called = {}
+
+    def fake_trigger_cronjob(namespace, name):
+        called["ns"] = namespace
+        called["name"] = name
+        return {"metadata": {"name": f"{name}-manual-20260101000000"}}
+
+    monkeypatch.setattr(app_module, "trigger_cronjob", fake_trigger_cronjob)
+    resp = client.post("/api/namespaces/test/cronjobs/some-cron/trigger")
+    assert resp.status_code == 200
+    assert called == {"ns": "test", "name": "some-cron"}
 
 
 def test_html_write_returns_plain_405(client):
