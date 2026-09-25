@@ -77,11 +77,14 @@ def _strip_immutable_fields(spec):
 
 
 READ_ONLY_METHODS = {"GET", "HEAD", "OPTIONS"}
+WRITE_ALLOWED_ENDPOINTS = {"api_trigger_cronjob"}
 
 
 @app.before_request
 def enforce_read_only():
     if request.method in READ_ONLY_METHODS:
+        return None
+    if request.endpoint in WRITE_ALLOWED_ENDPOINTS:
         return None
     message = f"Kronic is read-only; {request.method} is not permitted"
     headers = {"Allow": "GET, HEAD, OPTIONS"}
